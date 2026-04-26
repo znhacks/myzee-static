@@ -174,19 +174,12 @@ document.getElementById("search").addEventListener("keyup", function() {
 
 // ================= MUSIC =================
 const music = document.getElementById("bg-music");
-const btn = document.getElementById("music-btn");
-
-let isPlaying = false;
 
 music.volume = 0.5;
 
 // start music saat interaksi APAPUN
 const startMusic = () => {
-    music.play().then(() => {
-        isPlaying = true;
-        btn.innerText = "🔊";
-    }).catch(() => {});
-
+    music.play().catch(() => {});
     window.removeEventListener("click", startMusic);
     window.removeEventListener("touchstart", startMusic);
     window.removeEventListener("keydown", startMusic);
@@ -198,20 +191,6 @@ window.addEventListener("click", startMusic);
 window.addEventListener("touchstart", startMusic);
 window.addEventListener("keydown", startMusic);
 window.addEventListener("scroll", startMusic);
-
-// tombol manual
-btn.addEventListener("click", (e) => {
-    e.stopPropagation();
-
-    if (isPlaying) {
-        music.pause();
-        btn.innerText = "🔇";
-    } else {
-        music.play();
-        btn.innerText = "🔊";
-    }
-    isPlaying = !isPlaying;
-});
 </script>
 
 </body>
