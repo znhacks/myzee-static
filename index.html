@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Myzee Catalog Holder</title>
 
-    @vite(['resources/css/app.css'])
+    <!-- ✅ FIX CSS -->
+    <link rel="stylesheet" href="/css/catalog.css">
 </head>
 
 <body>
@@ -103,13 +104,12 @@
 
 <!-- 🎵 AUDIO -->
 <audio id="bg-music" loop>
-    <source src="{{ asset('music/Leisure.mp3') }}" type="audio/mpeg">
+    <source src="/music/Leisure.mp3" type="audio/mpeg">
 </audio>
 
 <!-- 🎧 BUTTON -->
 <div class="music-control" id="music-btn">🔇</div>
 
-<!-- ⚙️ SCRIPT -->
 <script>
 // ================= TAB =================
 const tabs = document.querySelectorAll(".tab");
@@ -156,30 +156,24 @@ const btn = document.getElementById("music-btn");
 
 let isPlaying = false;
 
-// awal OFF
 btn.innerText = "🔇";
-
 music.volume = 0.5;
 
-// Function to start music
 const startMusic = () => {
     music.play().then(() => {
         isPlaying = true;
         btn.innerText = "🔊";
     });
 
-    // Remove listeners after first play
     window.removeEventListener("click", startMusic);
     window.removeEventListener("touchstart", startMusic);
     window.removeEventListener("keydown", startMusic);
 };
 
-// Set up listeners for user interaction
 window.addEventListener("click", startMusic);
 window.addEventListener("touchstart", startMusic);
 window.addEventListener("keydown", startMusic);
 
-// toggle
 btn.addEventListener("click", () => {
     if (isPlaying) {
         music.pause();
