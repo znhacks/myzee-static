@@ -125,8 +125,8 @@
     💬 Contact
 </a>
 
-<!-- AUDIO --->
-<audio id="bg-music" loop>
+<!-- AUDIO -->
+<audio id="bg-music" loop preload="auto">
     <source src="/music/Leisure.mp3" type="audio/mpeg">
 </audio>
 
@@ -174,23 +174,61 @@ document.getElementById("search").addEventListener("keyup", function() {
 
 // ================= MUSIC =================
 const music = document.getElementById("bg-music");
+const btn = document.getElementById("music-btn");
+
+let isPlaying = false;
 
 music.volume = 0.5;
 
-// start music saat interaksi APAPUN
-const startMusic = () => {
-    music.play().catch(() => {});
-    window.removeEventListener("click", startMusic);
-    window.removeEventListener("touchstart", startMusic);
-    window.removeEventListener("keydown", startMusic);
-    window.removeEventListener("scroll", startMusic);
-};
+// ================= UI =================
+function updateUI() {
+    btn.innerText = isPlaying ? "🔊" : "🔇";
+}
 
-// trigger semua
-window.addEventListener("click", startMusic);
-window.addEventListener("touchstart", startMusic);
-window.addEventListener("keydown", startMusic);
-window.addEventListener("scroll", startMusic);
+// ================= PLAY =================
+async function playMusic() {
+    try {
+        await music.play();
+        isPlaying = true;
+        updateUI();
+    } catch (err) {
+        // autoplay diblok browser → normal
+    }
+}
+
+// ================= PAUSE =================
+function pauseMusic() {
+    music.pause();
+    isPlaying = false;
+    updateUI();
+}
+
+// ================= INIT (FIRST INTERACTION) =================
+function enableMusic() {
+    playMusic();
+
+    window.removeEventListener("click", enableMusic);
+    window.removeEventListener("touchstart", enableMusic);
+    window.removeEventListener("keydown", enableMusic);
+    window.removeEventListener("scroll", enableMusic);
+}
+
+// trigger pertama user interaction
+window.addEventListener("click", enableMusic, { once: true });
+window.addEventListener("touchstart", enableMusic, { once: true });
+window.addEventListener("keydown", enableMusic, { once: true });
+window.addEventListener("scroll", enableMusic, { once: true, passive: true });
+
+// ================= BUTTON TOGGLE =================
+btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
+    if (isPlaying) {
+        pauseMusic();
+    } else {
+        playMusic();
+    }
+});
 </script>
 
 </body>
