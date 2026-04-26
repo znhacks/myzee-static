@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Myzee Catalog Holder</title>
 
-    <!-- ✅ FIX CSS -->
+    <!-- CSS -->
     <link rel="stylesheet" href="/css/catalog.css">
 </head>
 
@@ -16,10 +16,10 @@
 <div class="container">
     <h1>📦 Sailor Piece - Pricelist</h1>
 
-    <!-- 🔍 SEARCH -->
+    <!-- SEARCH -->
     <input type="text" id="search" placeholder="Search item..." class="search-box">
 
-    <!-- 📑 TABS -->
+    <!-- TABS -->
     <div class="tabs">
         <button class="tab active" data-tab="sets">Sets</button>
         <button class="tab" data-tab="items">Items</button>
@@ -28,10 +28,10 @@
         <button class="tab" data-tab="ascend">Ascend</button>
     </div>
 
-    <!-- 🧩 SETS -->
-     
-<div class="tab-content active" id="sets">
-    <h2>📦 Sets Material</h2>
+    <!-- SETS -->
+    <div class="tab-content active" id="sets">
+        <h2>📦 Sets Material</h2>
+
         <div class="card">
             <div class="price">3K</div>
             <div class="item">• Limitless Sorcerer (Gojo V1)</div>
@@ -64,64 +64,66 @@
 
     <!-- ITEMS -->
     <div class="tab-content" id="items">
-    <h2>🧪 Items & Rerolls</h2>
+        <h2>🧪 Items & Rerolls</h2>
 
-    <div class="card">
-        <div class="price">Rerolls</div>
-        <div class="item">• Bloodline Stone — 1K</div>
-        <div class="item">• Race Reroll — 50P</div>
-        <div class="item">• Trait Reroll — 50P</div>
-        <div class="item">• Clan Reroll — 500P</div>
-        <div class="item">• Note: Minimal take 1K</div>
+        <div class="card">
+            <div class="price">Rerolls</div>
+            <div class="item">• Bloodline Stone — 1K</div>
+            <div class="item">• Race Reroll — 50P</div>
+            <div class="item">• Trait Reroll — 50P</div>
+            <div class="item">• Clan Reroll — 500P</div>
+            <div class="item">• Note: Minimal take 1K</div>
+        </div>
     </div>
-</div>
 
     <!-- CRATE -->
     <div class="tab-content" id="crate">
-    <h2>📦 Crates</h2>
+        <h2>📦 Crates</h2>
 
-    <div class="card">
-        <div class="price">Crates</div>
-        <div class="item">• Cosmetic Crate — 50P</div>
-        <div class="item">• Aura Crate — 50P</div>
-        <div class="item">• Note: Minimal take 1K (20 Crates)</div>
+        <div class="card">
+            <div class="price">Crates</div>
+            <div class="item">• Cosmetic Crate — 50P</div>
+            <div class="item">• Aura Crate — 50P</div>
+            <div class="item">• Note: Minimal take 1K (20 Crates)</div>
+        </div>
     </div>
-</div>
 
     <!-- CHEST -->
     <div class="tab-content" id="chest">
-    <h2>🎁 Chests</h2>
+        <h2>🎁 Chests</h2>
 
-    <div class="card">
-        <div class="price">Chests</div>
-        <div class="item">• 1K Mythical Chest — 500P</div>
-        <div class="item">• 1K Legendary Chest — 500P</div>
-        <div class="item">• Note: Minimal take 1K (2K Chest)</div>
+        <div class="card">
+            <div class="price">Chests</div>
+            <div class="item">• 1K Mythical Chest — 500P</div>
+            <div class="item">• 1K Legendary Chest — 500P</div>
+            <div class="item">• Note: Minimal take 1K (2K Chest)</div>
+        </div>
     </div>
-</div>
 
     <!-- ASCEND -->
     <div class="tab-content" id="ascend">
-    <h2>🔺 Ascends Material</h2>
+        <h2>🔺 Ascends Material</h2>
 
-    <div class="card">
-        <div class="price">Ascends</div>
-        <div class="item">• II → IV : 5K</div>
-        <div class="item">• V → VII : 10K</div>
+        <div class="card">
+            <div class="price">Ascends</div>
+            <div class="item">• II → IV : 5K</div>
+            <div class="item">• V → VII : 10K</div>
+        </div>
     </div>
+
 </div>
 
-<!-- WA BUTTON -->
+<!-- WA -->
 <a href="https://wa.me/6281234061011" target="_blank" class="wa-button">
     💬 Contact
 </a>
 
-<!-- 🎵 AUDIO -->
+<!-- AUDIO -->
 <audio id="bg-music" loop>
     <source src="/music/Leisure.mp3" type="audio/mpeg">
 </audio>
 
-<!-- 🎧 BUTTON -->
+<!-- BUTTON -->
 <div class="music-control" id="music-btn">🔇</div>
 
 <script>
@@ -148,10 +150,9 @@ document.getElementById("search").addEventListener("keyup", function() {
         let hasMatch = false;
 
         cards.forEach(card => {
-            let text = card.innerText.toLowerCase();
-            let match = text.includes(value);
+            let match = card.innerText.toLowerCase().includes(value);
             card.style.display = match ? "block" : "none";
-            if(match) hasMatch = true;
+            if (match) hasMatch = true;
         });
 
         if (value && hasMatch) {
@@ -170,25 +171,31 @@ const btn = document.getElementById("music-btn");
 
 let isPlaying = false;
 
-btn.innerText = "🔇";
 music.volume = 0.5;
 
+// start music saat interaksi APAPUN
 const startMusic = () => {
     music.play().then(() => {
         isPlaying = true;
         btn.innerText = "🔊";
-    });
+    }).catch(() => {});
 
     window.removeEventListener("click", startMusic);
     window.removeEventListener("touchstart", startMusic);
     window.removeEventListener("keydown", startMusic);
+    window.removeEventListener("scroll", startMusic);
 };
 
+// trigger semua
 window.addEventListener("click", startMusic);
 window.addEventListener("touchstart", startMusic);
 window.addEventListener("keydown", startMusic);
+window.addEventListener("scroll", startMusic);
 
-btn.addEventListener("click", () => {
+// tombol manual
+btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+
     if (isPlaying) {
         music.pause();
         btn.innerText = "🔇";
