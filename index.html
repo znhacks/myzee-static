@@ -48,6 +48,8 @@
             <div class="item">• Blessed Maiden (Cartethyia)</div>
             <div class="item">• Corrupt Knight (Alter)</div>
             <div class="item">• Strongest Shinobi (Madara)</div>
+            <div class="item">• Ice Queen (Esdeath)</div>
+            <div class="item">• Moon Slayer (Kokushibo)</div>
             <div class="item">• True Aizen (Aizen)</div>
             <div class="item">• Gilgamesh (Gilgamesh)</div>
         </div>
@@ -68,10 +70,12 @@
 
         <div class="card">
             <div class="price">Rerolls</div>
-            <div class="item">• Bloodline Stone — Rp. 1K</div>
-            <div class="item">• Race Reroll — Rp. 50P</div>
-            <div class="item">• Trait Reroll — Rp. 50P</div>
-            <div class="item">• Clan Reroll — Rp. 500P</div>
+            <div class="item">• Bloodline Stone — Rp. 1K / 1K Stone</div>
+            <div class="item">• Race Reroll — Rp. 50P / 500 RRR</div>
+            <div class="item">• Trait Reroll — Rp. 50P / 500 TRR</div>
+            <div class="item">• Clan Reroll — Rp. 500P / 1K CRR</div>
+            <div class="item">• Passive Shard — Rp. 500P / 1K Shard</div>
+            <div class="item">• Power Shard — Rp. 500P / 1K Shard</div>
             <div class="item">• Note: Minimal take Rp. 1K</div>
         </div>
     </div>
@@ -82,8 +86,8 @@
 
         <div class="card">
             <div class="price">Crates</div>
-            <div class="item">• Cosmetic Crate — Rp. 50P</div>
-            <div class="item">• Aura Crate — Rp. 50P</div>
+            <div class="item">• Cosmetic Crate — Rp. 50P / 1 Crate</div>
+            <div class="item">• Aura Crate — Rp. 50P / 1 Crate</div>
             <div class="item">• Note: Minimal take Rp. 1K (20 Crates)</div>
         </div>
     </div>
@@ -94,9 +98,9 @@
 
         <div class="card">
             <div class="price">Chests</div>
-            <div class="item">• 1K Mythical Chest — Rp. 500P</div>
-            <div class="item">• 1K Legendary Chest — Rp. 500P</div>
-            <div class="item">• Note: Minimal take Rp. 1K (2K Chest)</div>
+            <div class="item">• Mythical Chest — Rp. 500P / 1K</div>
+            <div class="item">• Legendary Chest — Rp. 500P / 2K</div>
+            <div class="item">• Note: Minimal take Rp. 1K</div>
         </div>
     </div>
 
@@ -172,7 +176,6 @@ document.getElementById("search").addEventListener("keyup", function() {
     });
 });
 
-// ================= MUSIC =================
 const music = document.getElementById("bg-music");
 const btn = document.getElementById("music-btn");
 
@@ -180,7 +183,7 @@ let isPlaying = false;
 
 music.volume = 0.5;
 
-// ================= UI =================
+// ================= ICON UPDATE =================
 function updateUI() {
     btn.innerText = isPlaying ? "🔊" : "🔇";
 }
@@ -191,8 +194,8 @@ async function playMusic() {
         await music.play();
         isPlaying = true;
         updateUI();
-    } catch (err) {
-        // autoplay diblok browser → normal
+    } catch (e) {
+        // autoplay blocked (normal di browser)
     }
 }
 
@@ -203,32 +206,45 @@ function pauseMusic() {
     updateUI();
 }
 
-// ================= INIT (FIRST INTERACTION) =================
-function enableMusic() {
-    playMusic();
-
-    window.removeEventListener("click", enableMusic);
-    window.removeEventListener("touchstart", enableMusic);
-    window.removeEventListener("keydown", enableMusic);
-    window.removeEventListener("scroll", enableMusic);
+// ================= SYNC STATE (IMPORTANT FIX) =================
+function syncState() {
+    isPlaying = !music.paused && !music.ended;
+    updateUI();
 }
 
-// trigger pertama user interaction
-window.addEventListener("click", enableMusic, { once: true });
-window.addEventListener("touchstart", enableMusic, { once: true });
-window.addEventListener("keydown", enableMusic, { once: true });
-window.addEventListener("scroll", enableMusic, { once: true, passive: true });
+// ================= FIRST USER INTERACTION =================
+function initMusic() {
+    playMusic();
 
-// ================= BUTTON TOGGLE =================
+    // setelah trigger pertama, hapus listener
+    window.removeEventListener("click", initMusic);
+    window.removeEventListener("touchstart", initMusic);
+    window.removeEventListener("keydown", initMusic);
+    window.removeEventListener("scroll", initMusic);
+}
+
+// trigger semua device (ANDROID + PC)
+window.addEventListener("click", initMusic, { once: true });
+window.addEventListener("touchstart", initMusic, { once: true });
+window.addEventListener("keydown", initMusic, { once: true });
+window.addEventListener("scroll", initMusic, { once: true, passive: true });
+
+// ================= BUTTON CONTROL =================
 btn.addEventListener("click", (e) => {
     e.stopPropagation();
 
-    if (isPlaying) {
-        pauseMusic();
-    } else {
+    if (music.paused) {
         playMusic();
+    } else {
+        pauseMusic();
     }
 });
+
+// ================= EXTRA SAFETY =================
+// kalau user pause dari system/browser
+music.addEventListener("pause", syncState);
+music.addEventListener("play", syncState);
+music.addEventListener("ended", syncState);
 </script>
 
 </body>
